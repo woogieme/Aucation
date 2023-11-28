@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --c-white: #f8f9fb;
+  --c-sky: #d4e0ff;
+  --c-blue: #247eff;
+}
+
+html {
+  height: 100%;
+  width: 100vw;
+  /* width: 1920px; */
+}
+
+body {
+  height: 100%;
+  color: #1e1e1e;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 10px; /* 스크롤바의 너비 */
+  height: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 30%; /* 스크롤바의 길이 */
+  background: #b1c8e8; /* 스크롤바의 색상 */
+
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(33, 122, 244, 0.1); /*스크롤바 뒷 배경 색상*/
+}
+
+.slider {
+  opacity: 1;
+  z-index: 1;
+}

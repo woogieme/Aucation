@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+    stages {
+               
+    stage('Build Docker-Compose') {
+                    steps {
+	           sh 'docker compose -f /var/jenkins_home/workspace/aucation-front/docker-compose.yml build client'
+                    }
+                }
+
+
+
+
+ 	stage('Up Docker-Compose') {
+                    steps {
+	           sh 'docker compose -f /var/jenkins_home/workspace/aucation-front/docker-compose.yml up -d client'
+                    }
+                }
+
+    
+     stage('RM Docker'){
+            steps {
+                
+                sh 'echo "Remove Docker"'
+ 
+                // 안쓰는이미지 -> <none> 태그 이미지 찾아서 삭제함
+                sh '''
+                    result=$(docker images -f "dangling=true" -q)
+                    if [ -n "$result" ]
+                    then
+                        docker rmi -f $(docker images -f "dangling=true" -q)
+                    else
+                        echo "No such container images"
+                    fi
+                '''
+ 
+            }
+            post {
+                 failure {
+                     sh 'echo "Remove Fail"'
+                }
+            }
+        }
+    }
+}

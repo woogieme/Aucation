@@ -1,0 +1,60 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 100px;
+  gap: 5px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul.pagination li {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem; /* 글꼴 크기 증가 */
+  cursor: pointer;
+}
+
+ul.pagination li:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+ul.pagination li:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+ul.pagination li {
+  text-decoration: none;
+  color: #646C76;
+  font-size: 1.35rem;
+}
+
+ul.pagination li.active a {
+  color: white;
+}
+
+ul.pagination li.active {
+  background-color: #247eff;
+  border-radius: 9999px;
+}
+
+ul.pagination li:hover {
+  color: #247eff;
+}
+
+ul.pagination li a.active {
+  color: #F8F9FB;
+}
+
+.page-selection {
+  width: 48px;
+  height: 30px;
+  color: #337ab7;
+}

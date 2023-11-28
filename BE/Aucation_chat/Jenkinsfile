@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+    stages {
+
+        stage('Build Docker-Compose') {
+            steps {
+	           sh 'docker compose -f /var/jenkins_home/workspace/aucation-chat/docker-compose.yml build chat'
+            }
+        }
+
+        stage('Docker stop and rm') {
+            steps {
+                script {
+                    def containerExists = sh(script: 'docker ps -aq --filter "name=auc-chat*"', returnStatus: true)
+                    
+                    if (containerExists == 0) {
+                        echo "Stopping and removing auc-chat container"
+                        sh 'docker stop auc-chat'
+                        sh 'docker rm auc-chat'
+                    } else {
+                        echo "auc-chat container does not exist, nothing to stop or remove."
+                    }
+                }
+            }
+            post {
+                failure {
+                    sh 'echo "Docker Fail"'
+                }
+            }
+        }
+
+        stage('Up Docker-Compose') {
+            steps {
+                sh 'docker compose -f /var/jenkins_home/workspace/aucation-chat/docker-compose.yml up chat -d'
+            }
+        }
+        
+        stage('RM Docker'){
+            steps {
+                sh 'echo "Remove Docker"'
+                // 안쓰는이미지 -> <none> 태그 이미지 찾아서 삭제함
+                sh '''
+                    result=$(docker images -f "dangling=true" -q)
+                    if [ -n "$result" ]
+                    then
+                        docker rmi -f $(docker images -f "dangling=true" -q)
+                    else
+                        echo "No such container images"
+                    fi
+                '''
+            }
+            post {
+                failure {
+                    sh 'echo "Remove Fail"'
+                }
+            }
+        }
+    }
+}

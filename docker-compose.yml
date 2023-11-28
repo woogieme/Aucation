@@ -1,0 +1,42 @@
+version: "3" #Compose 파일의 버전
+services: # 서비스 정의를 시작합니다. 각 서비스는 별도의 컨테이너로 실행
+  server:
+    image: auc-back:latest # 이미지 이름
+    container_name: auc-back # 컨테이너 이름
+    build:
+      context: ./BE/Aucation/ # 컨테이너와 호스트 간의 포트 매핑을 설정합니다.                                                                                 # 컨테이너 내부의 포트를 호스트의 포트와 연결하여 외부에서 접근할 수 있게 함
+
+    ports:
+        - 8001:8001  #외부 Port : 내부 Port
+    environment: #environment:: 컨테이너 내부의 환경 변수를 설정합니다.
+        - TZ=Asia/Seoul 
+    networks:
+      - auc_network
+
+  client:
+    image: auc-front:latest
+    container_name: auc-front
+    build:
+      context: ./FE/
+      dockerfile: Dockerfile #굳이안써도됨
+    ports:
+      - 3000:3000
+    networks: 
+      - auc_network #networks: 이 옵션은 서비스가 어떤 네트워크에 속하는지 정의하는 데 사용됩니다. 여러 서비스 간의 통신을 위해 사용되는 네트워크를 설정함
+
+  chat:
+    image: auc-chat:latest # 이미지 이름
+    container_name: auc-chat # 컨테이너 이름
+    build:
+      context: ./BE/Aucation_chat/ # 컨테이너와 호스트 간의 포트 매핑을 설정합니다.                                                                                 # 컨테이너 내부의 포트를 호스트의 포트와 연결하여 외부에서 접근할 수 있게 함
+
+    ports:
+        - 9001:9001  #외부 Port : 내부 Port
+    environment: #environment:: 컨테이너 내부의 환경 변수를 설정합니다.
+        - TZ=Asia/Seoul 
+    networks:
+      - auc_network
+
+networks:
+  auc_network:
+    driver: bridge
